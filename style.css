@@ -143,6 +143,14 @@ details > summary::-webkit-details-marker { display: none; }
   appearance: none;
 }
 
+@keyframes scroll-wheel {
+  0% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(6px); opacity: 0; }
+}
+.animate-wheel {
+  animation: scroll-wheel 1.5s infinite;
+}
+
 /* --- Modal --- */
 .modal-scrollbar::-webkit-scrollbar { width: 8px; }
 .modal-scrollbar::-webkit-scrollbar-track { background: rgba(255, 255, 255, 0.05); }
