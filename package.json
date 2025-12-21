@@ -10,6 +10,8 @@
   },
   "devDependencies": {
     "browser-sync": "^3.0.4",
-    "concurrently": "^8.2.2"
+    "concurrently": "^8.2.2",
+    "tailwindcss": "^4.0.0",
+    "@tailwindcss/cli": "^4.0.0"
   }
 }

@@ -19,11 +19,22 @@ jobs:
         with:
           submodules: true
           lfs: false
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "24"
+
+      - name: Automate Versioning
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          npm version patch -m "Bump version to %s [skip ci]"
+          git push origin HEAD:main --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build And Deploy
         id: builddeploy

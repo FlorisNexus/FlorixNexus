@@ -249,7 +249,19 @@ It is provided here for **portfolio viewing purposes only**. You may not reuse, 
 
 > **Unauthorized copying of this file, via any medium, is strictly prohibited.**
 
-## 📞 Contact
+## � CI/CD & Versioning
+
+This project uses **GitHub Actions** for continuous deployment to Azure Static Web Apps.
+
+### Automatic Versioning
+On every push to the `main` branch, the workflow automatically:
+1.  Increments the patch version in `package.json` (e.g., `1.0.0` -> `1.0.1`).
+2.  Creates a new git tag.
+3.  Pushes the update back to the repository.
+
+This ensures that every deployment has a unique version number.
+
+## �📞 Contact
 
 **Project Maintainer:** fdivrusa
 
