@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
 /* --- Global & Utilities --- */
 #hero-canvas {
   position: absolute;

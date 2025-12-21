@@ -98,8 +98,7 @@ This project is built with:
 ## 📦 Installation
 
 ### Prerequisites
-- A modern web browser (Chrome, Firefox, Safari, Edge)
-- A local web server (optional, for development)
+- Node.js and npm installed
 
 ### Quick Start
 
@@ -113,38 +112,27 @@ This project is built with:
    cd FlorixNexus
    ```
 
-3. **Open in browser**
-   - Simply open `index.html` in your web browser
-   - Or use a local development server:
-   
-   **Using Python:**
+3. **Install dependencies**
    ```bash
-   python -m http.server 8000
+   npm install
    ```
-   
-   **Using Node.js (http-server):**
-   ```bash
-   npx http-server
-   ```
-   
-   **Using VS Code Live Server:**
-   - Right-click on `index.html` → Open with Live Server
-
-4. **View in browser**
-   - Navigate to `http://localhost:8000` (or the port your server is using)
 
 ---
 
 ## 🎮 Usage
 
-### Basic Usage
-Simply open the `index.html` file in any modern web browser to view the landing page.
-
 ### Development
-1. Edit `index.html` to modify content and structure
-2. Customize colors in the Tailwind config section
-3. Add your own assets to the `assets/` folder
-4. Modify animations and effects in the `<style>` section
+To start the development server with hot reloading and Tailwind CSS watching:
+```bash
+npm run dev
+```
+This will start the server at `http://localhost:3000` (or similar).
+
+### Build for Production
+To build the minified CSS for production:
+```bash
+npm run build
+```
 
 ### Deployment
 This is a static website and can be deployed to any hosting service:

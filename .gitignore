@@ -1,0 +1,20 @@
+# --- Outils et Exécutables ---
+tailwind.exe
+*.exe
+*.bin
+
+# --- Dépendances locales ---
+node_modules/
+bun.lockb
+package-lock.json
+
+# --- Dossiers système et IDE ---
+.DS_Store
+.vscode/
+.idea/
+Thumbs.db
+
+# --- Logs ---
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
