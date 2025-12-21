@@ -2,11 +2,11 @@
 tailwind.exe
 *.exe
 *.bin
+dist/
 
 # --- Dépendances locales ---
 node_modules/
 bun.lockb
-package-lock.json
 
 # --- Dossiers système et IDE ---
 .DS_Store
