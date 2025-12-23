@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const defaultLang = "en";
+  const defaultLang = "fr";
   const supportedLangs = ["en", "fr", "nl"];
   const langKey = "florisnexus_lang";
 
