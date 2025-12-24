@@ -54,15 +54,39 @@ document.addEventListener("DOMContentLoaded", () => {
   function applyTranslations(translations) {
     const elements = document.querySelectorAll("[data-i18n]");
     elements.forEach((el) => {
-      const key = el.getAttribute("data-i18n");
-      if (translations[key]) {
-        if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
-          el.placeholder = translations[key];
-        } else if (el.hasAttribute("data-i18n-html")) {
-          el.innerHTML = translations[key];
-        } else {
-          el.textContent = translations[key];
-        }
+      let raw = el.getAttribute("data-i18n") || "";
+
+      // Support directive syntax like "[placeholder]contact.form.name_placeholder"
+      let directive = null;
+      let key = raw;
+      const dirMatch = raw.match(/^\[(\w+)\](.*)$/);
+      if (dirMatch) {
+        directive = dirMatch[1];
+        key = dirMatch[2];
+      }
+
+      const value = translations[key];
+      if (!value) return;
+
+      // Handle known directives
+      if (directive === "placeholder") {
+        if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") el.placeholder = value;
+        else el.setAttribute("placeholder", value);
+        return;
+      }
+
+      // data-i18n-html takes priority when present
+      if (el.hasAttribute("data-i18n-html")) {
+        el.innerHTML = value;
+        return;
+      }
+
+      // Default behavior: set textContent
+      if (el.tagName === "INPUT" || el.tagName === "TEXTAREA") {
+        // If no directive and element is input/textarea, set placeholder
+        el.placeholder = value;
+      } else {
+        el.textContent = value;
       }
     });
   }

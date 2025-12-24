@@ -193,24 +193,267 @@ document.addEventListener("keydown", (e) => {
 /* --- Contact Form Handler --- */
 const contactForm = document.getElementById("contact-form");
 if (contactForm) {
+  // Disable browser native constraint validation UI to avoid native tooltips
+  try { contactForm.noValidate = true; } catch (err) {}
+  const status = document.getElementById("form-status");
+  const btn = document.getElementById("submit-btn");
+
+  // translation helpers (use existing loaded translations)
+  const t = (key) => {
+    return (window.translations && window.translations[key]) ? window.translations[key] : key;
+  };
+
+  const tF = (key, vars = {}) => {
+    let str = t(key);
+    Object.keys(vars).forEach((k) => {
+      str = str.replace(new RegExp(`{{\\s*${k}\\s*}}`, "g"), vars[k]);
+    });
+    return str;
+  };
+
+  // small helper to display a friendly styled message in the existing #form-status
+  function showFormStatus(message, type = "error") {
+    status.textContent = message;
+    status.classList.remove("hidden");
+    status.className = "text-center text-sm mt-4 ";
+    if (type === "error") status.classList.add("text-red-400");
+    else if (type === "success") status.classList.add("text-green-400");
+    else status.classList.add("text-gray-300");
+    // subtle pulse to draw attention
+    // Force color in case global styles override
+    try {
+      if (type === 'error') status.style.color = '#fb7185';
+      else if (type === 'success') status.style.color = '#4ade80';
+      else status.style.color = '';
+    } catch (err) {}
+    status.animate([{ opacity: 0.95 }, { opacity: 1 }], { duration: 250 });
+  }
+
+  function clearFieldError(el) {
+    if (!el) return;
+    el.classList.remove("border-red-400", "ring-2", "ring-red-400");
+    // remove inline error message if present
+    try {
+      const errId = `${el.id}-error`;
+      const errEl = document.getElementById(errId);
+      if (errEl) errEl.remove();
+      if (el.getAttribute('aria-describedby') === errId) el.removeAttribute('aria-describedby');
+    } catch (err) {}
+  }
+
+  function markFieldError(el) {
+    if (!el) return;
+    el.classList.add("border-red-400", "ring-2", "ring-red-400");
+  }
+
+  // Create or update a per-field inline error message underneath the field
+  function setFieldError(el, message) {
+    if (!el) return;
+    markFieldError(el);
+
+    const errId = `${el.id}-error`;
+
+    // If an existing error element exists, update it
+    let errEl = document.getElementById(errId);
+    if (!errEl) {
+      errEl = document.createElement('p');
+      errEl.id = errId;
+      // center the message under the component and ensure red color
+      errEl.className = 'field-error text-sm text-red-400 mt-2 text-center w-full';
+      errEl.style.display = 'block';
+      // Insert after the input element
+      try {
+        el.insertAdjacentElement('afterend', errEl);
+      } catch (e) {
+        if (el.parentElement) el.parentElement.appendChild(errEl);
+      }
+    }
+    errEl.textContent = message;
+
+    // Force color in case global styles override text color
+    try {
+      errEl.style.color = '#fb7185'; // Tailwind red-400
+    } catch (err) {}
+
+    // Associate for accessibility
+    try {
+      el.setAttribute('aria-describedby', errId);
+    } catch (err) {}
+  }
+
+  // Helper to show reCAPTCHA error centered under the widget
+  function setRecaptchaError(message) {
+    const captchaEl = document.querySelector('.g-recaptcha');
+    if (!captchaEl) {
+      // fallback to global banner
+      showFormStatus(message, 'error');
+      return;
+    }
+    if (!captchaEl.id) captchaEl.id = 'g-recaptcha';
+    setFieldError(captchaEl, message);
+  }
+
+  // Try to attach a callback to the reCAPTCHA widget so we can clear errors when solved.
+  function attachRecaptchaHandler() {
+    const captchaEl = document.querySelector('.g-recaptcha');
+    if (!captchaEl) return;
+
+    // If grecaptcha.render is available, render with our callback if not already rendered
+    const tryRender = () => {
+      if (typeof grecaptcha !== 'undefined' && grecaptcha.render) {
+        try {
+          // Only render if the element doesn't already contain an iframe
+          if (!captchaEl.querySelector('iframe')) {
+            grecaptcha.render(captchaEl, {
+              sitekey: captchaEl.getAttribute('data-sitekey') || '',
+              theme: captchaEl.getAttribute('data-theme') || 'light',
+              callback: function () {
+                clearFieldError(captchaEl);
+              }
+            });
+          } else {
+            // Already rendered by the page: start polling for response to clear error
+            monitorRecaptcha();
+          }
+        } catch (err) {
+          // If render fails, fallback to polling
+          monitorRecaptcha();
+        }
+      } else {
+        // retry after a short delay until grecaptcha is ready
+        setTimeout(tryRender, 300);
+      }
+    };
+
+    tryRender();
+  }
+
+  // Poll grecaptcha.getResponse() until a non-empty response appears then clear the error
+  function monitorRecaptcha() {
+    const captchaEl = document.querySelector('.g-recaptcha');
+    if (!captchaEl) return;
+    let attempts = 0;
+    const interval = setInterval(() => {
+      attempts++;
+      try {
+        if (typeof grecaptcha !== 'undefined' && typeof grecaptcha.getResponse === 'function') {
+          const resp = grecaptcha.getResponse();
+          if (resp && resp.length > 0) {
+            clearFieldError(captchaEl);
+            clearInterval(interval);
+            return;
+          }
+        }
+      } catch (err) {
+        // ignore and retry
+      }
+      if (attempts > 60) {
+        clearInterval(interval); // stop polling after ~18s
+      }
+    }, 300);
+  }
+
+  // Initialize reCAPTCHA handlers
+  attachRecaptchaHandler();
+
+  // Capture native 'invalid' events and replace browser tooltip with our custom UI
+  contactForm.addEventListener(
+    "invalid",
+    function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+  const el = e.target;
+  const label = document.querySelector(`label[for="${el.id}"]`);
+  const fieldName = label ? label.textContent.trim() : (el.name || "this field");
+  let msg = tF("contact.form.validation.field_required", { field: fieldName });
+  if (el.validity && el.validity.typeMismatch) msg = tF("contact.form.validation.invalid_type", { field: fieldName.toLowerCase() });
+  setFieldError(el, msg);
+  try { el.focus(); } catch (err) {}
+      // remove highlight when user types
+      el.addEventListener("input", function onInput() {
+        if (el.checkValidity()) clearFieldError(el);
+        el.removeEventListener("input", onInput);
+      });
+    },
+    true
+  );
+
+  // Intercept the click on the submit button to show custom validation messages
+  if (btn) {
+    btn.addEventListener("click", function (e) {
+      // Prevent native tooltip validation UI
+      e.preventDefault();
+
+      // Remove previous highlights
+      Array.from(contactForm.elements).forEach((el) => clearFieldError(el));
+      status.classList.add("hidden");
+
+      // Run built-in validity checks
+      if (!contactForm.checkValidity()) {
+        // Find first invalid field
+        const invalidEl = Array.from(contactForm.elements).find((el) => !el.checkValidity());
+        // Build a friendly message using translations
+        let friendlyMsg = t("contact.form.validation.correct_fields");
+        if (invalidEl) {
+          const label = document.querySelector(`label[for="${invalidEl.id}"]`);
+          const fieldName = label ? label.textContent.trim() : (invalidEl.name || "this field");
+
+          if (invalidEl.validity.valueMissing) {
+            friendlyMsg = tF("contact.form.validation.field_required", { field: fieldName });
+          } else if (invalidEl.validity.typeMismatch) {
+            friendlyMsg = tF("contact.form.validation.invalid_type", { field: fieldName.toLowerCase() });
+          } else if (invalidEl.validity.tooShort || invalidEl.validity.tooLong) {
+            friendlyMsg = tF("contact.form.validation.invalid_length", { field: fieldName });
+          }
+
+          // Show inline error under the invalid field and focus it
+          setFieldError(invalidEl, friendlyMsg);
+          try { invalidEl.focus(); } catch (err) {}
+        } else {
+          // Fallback to a global message
+          showFormStatus(friendlyMsg, "error");
+        }
+
+        // Remove highlight and inline message once user types
+        Array.from(contactForm.elements).forEach((el) => {
+          el.addEventListener("input", function onInput() {
+            if (el.checkValidity()) {
+              clearFieldError(el);
+            }
+            el.removeEventListener("input", onInput);
+          });
+        });
+
+        return; // stop here, don't submit
+      }
+
+      // If form is valid, trigger the normal submit flow which will perform the fetch.
+      // Use requestSubmit to ensure the submit event is triggered programmatically.
+      contactForm.requestSubmit();
+    });
+  }
+
+  // Main submit handler: performs reCaptcha check and AJAX submit
   contactForm.addEventListener("submit", async function (e) {
     e.preventDefault();
-    
+
     // Helper to get translation
     const t = (key) => {
       return (window.translations && window.translations[key]) ? window.translations[key] : key;
     };
 
-    const status = document.getElementById("form-status");
-    const btn = document.getElementById("submit-btn");
     const btnText = btn.querySelector("span");
-    
+
     // Check reCaptcha
-    const captchaResponse = grecaptcha.getResponse();
+    let captchaResponse = "";
+    try {
+      captchaResponse = (typeof grecaptcha !== 'undefined') ? grecaptcha.getResponse() : '';
+    } catch (err) {
+      captchaResponse = '';
+    }
     if (!captchaResponse) {
-      status.textContent = t("contact.form.status.recaptcha");
-      status.className = "text-center text-sm text-red-400 mt-4";
-      status.classList.remove("hidden");
+      // show reCaptcha error directly under the widget for better context
+      setRecaptchaError(t("contact.form.status.recaptcha"));
       return;
     }
 
@@ -226,30 +469,24 @@ if (contactForm) {
       const response = await fetch(contactForm.action, {
         method: "POST",
         body: formData,
-        headers: {
-          'Accept': 'application/json'
-        }
+        headers: { 'Accept': 'application/json' }
       });
 
       if (response.ok) {
-        status.textContent = t("contact.form.status.success");
-        status.className = "text-center text-sm text-green-400 mt-4";
+        showFormStatus(t("contact.form.status.success"), "success");
         contactForm.reset();
-        grecaptcha.reset();
+        if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
       } else {
-        const data = await response.json();
-        if (Object.hasOwn(data, 'errors')) {
-          status.textContent = data["errors"].map(error => error["message"]).join(", ");
+        const data = await response.json().catch(() => ({}));
+        if (data && Object.hasOwn(data, 'errors')) {
+          showFormStatus(data["errors"].map(error => error["message"]).join(", "), "error");
         } else {
-          status.textContent = t("contact.form.status.error");
+          showFormStatus(t("contact.form.status.error"), "error");
         }
-        status.className = "text-center text-sm text-red-400 mt-4";
       }
     } catch (error) {
-      status.textContent = t("contact.form.status.generic_error");
-      status.className = "text-center text-sm text-red-400 mt-4";
+      showFormStatus(t("contact.form.status.generic_error"), "error");
     } finally {
-      status.classList.remove("hidden");
       btn.disabled = false;
       btnText.textContent = originalText;
     }

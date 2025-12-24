@@ -99,6 +99,16 @@
 
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/dist/style.css" />
+  <style>
+    /* Make submit button hover more visible (works even if Tailwind classes are overridden) */
+    #submit-btn{ transition: transform .18s ease, box-shadow .18s ease; }
+    #submit-btn:hover{ transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 30px rgba(168,85,247,0.16); }
+    /* Ensure inline field errors have sufficient contrast if parent color is forcing white */
+    .field-error{ color: #fb7185; }
+    /* Ensure social icons are perfectly centered inside their circular buttons */
+    .footer-social a { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
+    .footer-social a svg { display: block; margin: 0 auto; width: 20px; height: 20px; }
+  </style>
 </head>
 
 <body class="bg-nexusDark text-slate-200 antialiased overflow-x-hidden relative">
@@ -618,8 +628,6 @@
                       Website</option>
                     <option value="saas" class="bg-nexusDark" data-i18n="contact.form.project_types.saas">SaaS / Web App
                     </option>
-                    <option value="consulting" class="bg-nexusDark" data-i18n="contact.form.project_types.consulting">
-                      Consulting / Audit</option>
                     <option value="other" class="bg-nexusDark" data-i18n="contact.form.project_types.other">Other
                     </option>
                   </select>
@@ -640,7 +648,7 @@
                 </div>
 
                 <button type="submit" id="submit-btn"
-                  class="w-full py-4 px-6 rounded-lg font-bold text-white transition-all transform active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 overflow-hidden relative group">
+                  class="w-full py-4 px-6 rounded-lg font-bold text-white transition-all transform active:scale-95 hover:scale-105 hover:shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 overflow-hidden relative group">
                   <!-- Background Gradient -->
                   <div
                     class="absolute inset-0 bg-gradient-to-r from-nexusPurple to-nexusCyan group-hover:scale-105 transition-transform duration-300">
@@ -657,7 +665,7 @@
                     </svg>
                   </div>
                 </button>
-                <p id="form-status" class="text-sm font-medium hidden"></p>
+                <p id="form-status" class="text-sm font-medium hidden" role="status" aria-live="polite"></p>
 
               </form>
             </div>
@@ -735,7 +743,7 @@
 
       <div>
         <h4 class="text-white font-bold mb-4 uppercase tracking-wider" data-i18n="footer.connect">Connect</h4>
-        <div class="flex gap-4 justify-center">
+  <div class="flex gap-4 justify-center md:justify-start footer-social">
           <a href="https://www.linkedin.com/in/florian-di-vrusa/" target="_blank" rel="noopener noreferrer"
             class="w-10 h-10 rounded-full bg-gray-900 flex items-center justify-center text-gray-400 hover:bg-[#0077b5] hover:text-white transition-all transform hover:-translate-y-1">
             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
