@@ -17,6 +17,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  // Initialize global translations object
+  window.translations = {};
+
   setLanguage(currentLang);
 
   async function setLanguage(lang) {
@@ -33,6 +36,9 @@ document.addEventListener("DOMContentLoaded", () => {
       const response = await fetch(`/assets/lang/${lang}.json`);
       if (!response.ok) throw new Error(`Could not load ${lang} translations`);
       const translations = await response.json();
+      
+      // Expose globally
+      window.translations = translations;
 
       applyTranslations(translations);
 

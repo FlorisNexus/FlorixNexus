@@ -86,5 +86,30 @@
   "404.title": "Page Not Found",
   "404.desc": "The digital path you are looking for seems to have vanished into the cloud.",
   "404.home": "Back to Home",
-  "404.contact": "Contact Support"
+  "404.contact": "Contact Support",
+
+  "contact.badge": "Available for new projects",
+  "contact.trust.fast_response.title": "Fast Response",
+  "contact.trust.fast_response.desc": "We typically reply within 24 hours.",
+  "contact.trust.consultation.title": "Free Consultation",
+  "contact.trust.consultation.desc": "First 30-min discovery call is on us.",
+  "contact.direct_contact": "Or contact directly",
+  "contact.form.project_type": "Project Type",
+  "contact.form.project_types.website": "Showcase Website",
+  "contact.form.project_types.saas": "SaaS / Web App",
+  "contact.form.project_types.consulting": "Consulting / Audit",
+  "contact.form.project_types.other": "Other",
+
+  "contact.form.name": "Name",
+  "contact.form.name_placeholder": "John Doe",
+  "contact.form.email": "Email",
+  "contact.form.email_placeholder": "john@example.com",
+  "contact.form.message": "Message",
+  "contact.form.message_placeholder": "Tell us about your project...",
+  "contact.form.send": "Send Message",
+  "contact.form.status.recaptcha": "Please complete the reCaptcha.",
+  "contact.form.status.sending": "Sending...",
+  "contact.form.status.success": "Message sent successfully! We'll get back to you soon.",
+  "contact.form.status.error": "Oops! There was a problem submitting your form.",
+  "contact.form.status.generic_error": "Oops! There was a problem submitting your form."
 }

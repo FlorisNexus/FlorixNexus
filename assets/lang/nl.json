@@ -86,5 +86,30 @@
   "404.title": "Pagina Niet Gevonden",
   "404.desc": "Het digitale pad dat u zoekt lijkt in de cloud te zijn verdwenen.",
   "404.home": "Terug naar Home",
-  "404.contact": "Contacteer Support"
+  "404.contact": "Contacteer Support",
+
+  "contact.badge": "Beschikbaar voor nieuwe projecten",
+  "contact.trust.fast_response.title": "Snelle Reactie",
+  "contact.trust.fast_response.desc": "Wij antwoorden doorgaans binnen 24 uur.",
+  "contact.trust.consultation.title": "Gratis Consultatie",
+  "contact.trust.consultation.desc": "Eerste kennismakingsgesprek van 30 min is gratis.",
+  "contact.direct_contact": "Of neem direct contact op",
+  "contact.form.project_type": "Type Project",
+  "contact.form.project_types.website": "Showcase Website",
+  "contact.form.project_types.saas": "SaaS / Web App",
+  "contact.form.project_types.consulting": "Consulting / Audit",
+  "contact.form.project_types.other": "Andere",
+
+  "contact.form.name": "Naam",
+  "contact.form.name_placeholder": "Jan Jansen",
+  "contact.form.email": "E-mail",
+  "contact.form.email_placeholder": "jan@voorbeeld.com",
+  "contact.form.message": "Bericht",
+  "contact.form.message_placeholder": "Vertel ons over uw project...",
+  "contact.form.send": "Verstuur bericht",
+  "contact.form.status.recaptcha": "Vul de reCaptcha in.",
+  "contact.form.status.sending": "Verzenden...",
+  "contact.form.status.success": "Bericht succesvol verzonden! We nemen snel contact met u op.",
+  "contact.form.status.error": "Oeps! Er is een probleem opgetreden bij het verzenden van het formulier.",
+  "contact.form.status.generic_error": "Oeps! Er is een probleem opgetreden bij het verzenden van het formulier."
 }

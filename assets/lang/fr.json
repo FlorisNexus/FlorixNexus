@@ -85,5 +85,30 @@
   "404.title": "Page Non Trouvée",
   "404.desc": "Le chemin numérique que vous cherchez semble s'être volatilisé dans le cloud.",
   "404.home": "Retour à l'Accueil",
-  "404.contact": "Contacter le Support"
+  "404.contact": "Contacter le Support",
+
+  "contact.badge": "Disponible pour nouveaux projets",
+  "contact.trust.fast_response.title": "Réponse Rapide",
+  "contact.trust.fast_response.desc": "Nous répondons généralement sous 24h.",
+  "contact.trust.consultation.title": "Consultation Gratuite",
+  "contact.trust.consultation.desc": "Premier appel de découverte de 30 min offert.",
+  "contact.direct_contact": "Ou contactez directement",
+  "contact.form.project_type": "Type de Projet",
+  "contact.form.project_types.website": "Site Vitrine",
+  "contact.form.project_types.saas": "SaaS / Application Web",
+  "contact.form.project_types.consulting": "Consulting / Audit",
+  "contact.form.project_types.other": "Autre",
+
+  "contact.form.name": "Nom",
+  "contact.form.name_placeholder": "Jean Dupont",
+  "contact.form.email": "Email",
+  "contact.form.email_placeholder": "jean@exemple.com",
+  "contact.form.message": "Message",
+  "contact.form.message_placeholder": "Parlez-nous de votre projet...",
+  "contact.form.send": "Envoyer le message",
+  "contact.form.status.recaptcha": "Veuillez compléter le reCaptcha.",
+  "contact.form.status.sending": "Envoi en cours...",
+  "contact.form.status.success": "Message envoyé avec succès ! Nous vous répondrons bientôt.",
+  "contact.form.status.error": "Oups ! Un problème est survenu lors de l'envoi du formulaire.",
+  "contact.form.status.generic_error": "Oups ! Un problème est survenu lors de l'envoi du formulaire."
 }

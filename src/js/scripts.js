@@ -189,3 +189,69 @@ function closeModal() {
 document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") closeModal();
 });
+
+/* --- Contact Form Handler --- */
+const contactForm = document.getElementById("contact-form");
+if (contactForm) {
+  contactForm.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    
+    // Helper to get translation
+    const t = (key) => {
+      return (window.translations && window.translations[key]) ? window.translations[key] : key;
+    };
+
+    const status = document.getElementById("form-status");
+    const btn = document.getElementById("submit-btn");
+    const btnText = btn.querySelector("span");
+    
+    // Check reCaptcha
+    const captchaResponse = grecaptcha.getResponse();
+    if (!captchaResponse) {
+      status.textContent = t("contact.form.status.recaptcha");
+      status.className = "text-center text-sm text-red-400 mt-4";
+      status.classList.remove("hidden");
+      return;
+    }
+
+    // Prepare UI
+    btn.disabled = true;
+    const originalText = btnText.textContent;
+    btnText.textContent = t("contact.form.status.sending");
+    status.classList.add("hidden");
+
+    const formData = new FormData(contactForm);
+
+    try {
+      const response = await fetch(contactForm.action, {
+        method: "POST",
+        body: formData,
+        headers: {
+          'Accept': 'application/json'
+        }
+      });
+
+      if (response.ok) {
+        status.textContent = t("contact.form.status.success");
+        status.className = "text-center text-sm text-green-400 mt-4";
+        contactForm.reset();
+        grecaptcha.reset();
+      } else {
+        const data = await response.json();
+        if (Object.hasOwn(data, 'errors')) {
+          status.textContent = data["errors"].map(error => error["message"]).join(", ");
+        } else {
+          status.textContent = t("contact.form.status.error");
+        }
+        status.className = "text-center text-sm text-red-400 mt-4";
+      }
+    } catch (error) {
+      status.textContent = t("contact.form.status.generic_error");
+      status.className = "text-center text-sm text-red-400 mt-4";
+    } finally {
+      status.classList.remove("hidden");
+      btn.disabled = false;
+      btnText.textContent = originalText;
+    }
+  });
+}
