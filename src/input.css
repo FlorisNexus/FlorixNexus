@@ -1,5 +1,7 @@
-@import "tailwindcss";
-@config "../tailwind.config.js";
+/* Tailwind directives - these are transformed by PostCSS + Tailwind plugin */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* --- Global & Utilities --- */
 #hero-canvas {

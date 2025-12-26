@@ -28,6 +28,7 @@
 - [Features](#-features)
 - [Technologies](#-technologies)
 - [Installation](#-installation)
+- [Development](#-development)
 - [Usage](#-usage)
 - [Project Structure](#-project-structure)
 - [Customization](#-customization)
@@ -122,11 +123,13 @@ This project is built with:
 ## 🎮 Usage
 
 ### Development
-To start the development server with hot reloading and Tailwind CSS watching:
+For detailed development setup, including HTTPS configuration and build tools, see [DEVELOPMENT.md](DEVELOPMENT.md).
+
+To start the development server:
 ```bash
 npm run dev
 ```
-This will start the server at `http://localhost:3000` (or similar).
+This starts Vite at `https://localhost:3000` with hot reloading.
 
 ### Build for Production
 To build the minified CSS for production:

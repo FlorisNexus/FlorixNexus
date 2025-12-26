@@ -4,14 +4,17 @@
   "description": "Site vitrine pour FlorisNexus",
   "main": "index.html",
   "scripts": {
-    "dev": "concurrently \"tailwind.exe -i ./src/input.css -o ./dist/style.css --watch\" \"browser-sync start --server --files 'index.html, dist/*.css, src/js/*.js'\"",
-    "build": "npx @tailwindcss/cli -i ./src/input.css -o ./dist/style.css --minify",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "setup-https": "powershell -Command \"if (!(Get-Command choco -ErrorAction SilentlyContinue)) { Write-Host 'Chocolatey not found. Install it from https://chocolatey.org/install and run this command again.'; exit 1 }; if (!(Get-Command mkcert -ErrorAction SilentlyContinue)) { choco install mkcert -y }; mkcert -install; mkcert localhost 127.0.0.1 ::1; New-Item -ItemType Directory -Force -Path certs; Move-Item -Force localhost+2.pem certs/localhost.pem; Move-Item -Force localhost+2-key.pem certs/localhost-key.pem; Write-Host 'HTTPS certs generated and moved to ./certs. Restart dev server with npm run dev.'\"",
     "check-seo": "npx lighthouse https://florisnexus.com --view"
   },
   "devDependencies": {
-    "browser-sync": "^3.0.4",
-    "concurrently": "^8.2.2",
-    "tailwindcss": "^4.0.0",
-    "@tailwindcss/cli": "^4.0.0"
+    "@vitejs/plugin-basic-ssl": "^1.2.0",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "tailwindcss": "^3.4.7",
+    "vite": "^5.0.0"
   }
 }

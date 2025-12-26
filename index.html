@@ -98,14 +98,11 @@
   <meta name="msvalidate.01" content="F21004040BD2DEF3E9F91B4AD28AA896" />
 
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="/dist/style.css" />
+  <link rel="stylesheet" href="/src/input.css" />
   <style>
-    /* Make submit button hover more visible (works even if Tailwind classes are overridden) */
     #submit-btn{ transition: transform .18s ease, box-shadow .18s ease; }
     #submit-btn:hover{ transform: translateY(-3px) scale(1.03); box-shadow: 0 14px 30px rgba(168,85,247,0.16); }
-    /* Ensure inline field errors have sufficient contrast if parent color is forcing white */
     .field-error{ color: #fb7185; }
-    /* Ensure social icons are perfectly centered inside their circular buttons */
     .footer-social a { display: inline-flex; align-items: center; justify-content: center; line-height: 0; }
     .footer-social a svg { display: block; margin: 0 auto; width: 20px; height: 20px; }
   </style>
@@ -600,8 +597,10 @@
 
           <br>
 
-          <!-- Right Column: Interactive Form -->
-          <div class="relative">
+        </div>
+
+        <!-- Right Column: Interactive Form -->
+        <div class="relative">
             <div class="absolute -inset-1 bg-gradient-to-r from-nexusPurple to-nexusCyan rounded-2xl blur opacity-20">
             </div>
             <div class="glass-panel p-8 md:p-10 rounded-2xl relative shadow-2xl">
@@ -676,7 +675,6 @@
             </div>
           </div>
 
-        </div>
       </div>
   </section>
   </main>
@@ -811,7 +809,13 @@
   </div>
 
   <script src="/src/js/app.js" defer></script>
-  <script src="/src/js/scripts.js" defer></script>
+  <script src="/src/js/header.js" defer></script>
+  <script src="/src/js/hero.js" defer></script>
+  <script src="/src/js/observers.js" defer></script>
+  <script src="/src/js/faq.js" defer></script>
+  <script src="/src/js/mobile-menu.js" defer></script>
+  <script src="/src/js/modal.js" defer></script>
+  <script src="/src/js/contact.js" defer></script>
 </body>
 
 </html>

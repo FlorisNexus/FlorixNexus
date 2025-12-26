@@ -1,5 +1,4 @@
 # --- Outils et Exécutables ---
-tailwind.exe
 *.exe
 *.bin
 dist/
@@ -7,6 +6,9 @@ dist/
 # --- Dépendances locales ---
 node_modules/
 bun.lockb
+
+# --- Certificats locaux (ne pas committer) ---
+certs/
 
 # --- Dossiers système et IDE ---
 .DS_Store
