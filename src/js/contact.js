@@ -1,6 +1,8 @@
-/* --- Contact Form Handler --- */
-const contactForm = document.getElementById("contact-form");
-if (contactForm) {
+/* --- Contact Form Handler (module) --- */
+export function initContact() {
+  const contactForm = document.getElementById("contact-form");
+  if (!contactForm) return;
+
   // Disable browser native constraint validation UI to avoid native tooltips
   try { contactForm.noValidate = true; } catch (err) {}
   const status = document.getElementById("form-status");
@@ -20,6 +22,7 @@ if (contactForm) {
   };
 
   function showFormStatus(message, type = "error") {
+    if (!status) return;
     status.textContent = message;
     status.classList.remove("hidden");
     status.className = "text-center text-sm mt-4 ";
@@ -31,7 +34,8 @@ if (contactForm) {
       else if (type === 'success') status.style.color = '#4ade80';
       else status.style.color = '';
     } catch (err) {}
-    status.animate([{ opacity: 0.95 }, { opacity: 1 }], { duration: 250 });
+    try { status.animate([{ opacity: 0.95 }, { opacity: 1 }], { duration: 250 }); } catch (e) {}
+    try { status.classList.add('status-appear'); } catch (e) {}
   }
 
   function clearFieldError(el) {
@@ -55,6 +59,16 @@ if (contactForm) {
   function setFieldError(el, message) {
     if (!el) return;
     markFieldError(el);
+
+    // small attention animation
+    try {
+      el.classList.remove('shake');
+      // trigger reflow to restart animation
+      // eslint-disable-next-line no-unused-expressions
+      el.offsetWidth;
+      el.classList.add('shake');
+      el.addEventListener('animationend', function _end() { el.classList.remove('shake'); el.removeEventListener('animationend', _end); });
+    } catch (err) {}
 
     const errId = `${el.id}-error`;
 
@@ -148,6 +162,12 @@ if (contactForm) {
 
   attachRecaptchaHandler();
 
+  // Add subtle focus glow to inputs/selects/textareas
+  try {
+    const focusables = contactForm.querySelectorAll('input[type="text"], input[type="email"], textarea, select');
+    focusables.forEach((el) => el.classList.add('input-glow'));
+  } catch (e) {}
+
   contactForm.addEventListener(
     "invalid",
     function (e) {
@@ -173,7 +193,7 @@ if (contactForm) {
     submitBtn.addEventListener("click", function (e) {
       e.preventDefault();
       Array.from(contactForm.elements).forEach((el) => clearFieldError(el));
-      status.classList.add("hidden");
+      if (status) status.classList.add("hidden");
 
       if (!contactForm.checkValidity()) {
         const invalidEl = Array.from(contactForm.elements).find((el) => !el.checkValidity());
@@ -217,7 +237,7 @@ if (contactForm) {
       return (window.translations && window.translations[key]) ? window.translations[key] : key;
     };
 
-    const btnText = btn.querySelector("span");
+    const btnText = btn ? btn.querySelector("span") : null;
 
     let captchaResponse = "";
     try {
@@ -230,12 +250,14 @@ if (contactForm) {
       return;
     }
 
-    btn.disabled = true;
-    try { btn.setAttribute('aria-busy', 'true'); } catch (e) {}
-    btn.classList.add('opacity-70', 'cursor-wait');
-    const originalText = btnText.textContent;
-    btnText.textContent = t("contact.form.status.sending");
-    status.classList.add("hidden");
+    if (btn) {
+      btn.disabled = true;
+      try { btn.setAttribute('aria-busy', 'true'); } catch (e) {}
+      btn.classList.add('opacity-70', 'cursor-wait');
+    }
+    const originalText = btnText ? btnText.textContent : '';
+    if (btnText) btnText.textContent = t("contact.form.status.sending");
+    if (status) status.classList.add("hidden");
 
     const formData = new FormData(contactForm);
 
@@ -248,6 +270,28 @@ if (contactForm) {
 
       if (response.ok) {
         showFormStatus(t("contact.form.status.success"), "success");
+        // success animation on the panel
+        try {
+          const panel = contactForm.closest('.glass-panel');
+          if (panel) {
+            panel.classList.add('form-success');
+            // add check badge if not present
+            let badge = panel.querySelector('.check-badge');
+            if (!badge) {
+              badge = document.createElement('div');
+              badge.className = 'check-badge';
+              badge.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"></path></svg>';
+              panel.appendChild(badge);
+            }
+            // animate pulse and badge
+            setTimeout(() => panel.classList.add('pulse', 'show-badge'), 60);
+            // remove pulse after a short period
+            setTimeout(() => panel.classList.remove('pulse'), 2200);
+            // keep badge visible briefly then hide
+            setTimeout(() => panel.classList.remove('show-badge', 'form-success'), 4000);
+          }
+        } catch (e) {}
+
         contactForm.reset();
         if (typeof grecaptcha !== 'undefined') grecaptcha.reset();
       } else {
@@ -261,10 +305,14 @@ if (contactForm) {
     } catch (error) {
       showFormStatus(t("contact.form.status.generic_error"), "error");
     } finally {
-      btn.disabled = false;
-      try { btn.removeAttribute('aria-busy'); } catch (e) {}
-      btn.classList.remove('opacity-70', 'cursor-wait');
-      btnText.textContent = originalText;
+      if (btn) {
+        btn.disabled = false;
+        try { btn.removeAttribute('aria-busy'); } catch (e) {}
+        btn.classList.remove('opacity-70', 'cursor-wait');
+      }
+      if (btnText) btnText.textContent = originalText;
     }
   });
 }
+
+export default initContact;

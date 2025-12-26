@@ -547,8 +547,8 @@
     <div class="max-w-7xl mx-auto relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
 
-        <!-- Left Column: Info & Context -->
-        <div class="space-y-10 lg:sticky lg:top-32">
+  <!-- Left Column: Info & Context -->
+  <div class="space-y-10 lg:sticky lg:top-32 contact-left">
           <div class="space-y-6">
             <h2 class="text-4xl md:text-6xl font-bold text-white leading-tight">
               <span data-i18n="contact.title_start">Let's build something</span>
@@ -603,7 +603,7 @@
         <div class="relative">
             <div class="absolute -inset-1 bg-gradient-to-r from-nexusPurple to-nexusCyan rounded-2xl blur opacity-20">
             </div>
-            <div class="glass-panel p-8 md:p-10 rounded-2xl relative shadow-2xl">
+            <div class="glass-panel p-8 md:p-10 rounded-2xl relative shadow-2xl contact-form-panel">
               <form id="contact-form" action="https://formspree.io/f/xqeznnny" method="POST" class="space-y-6">
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -808,14 +808,7 @@
     </div>
   </div>
 
-  <script src="/src/js/app.js" defer></script>
-  <script src="/src/js/header.js" defer></script>
-  <script src="/src/js/hero.js" defer></script>
-  <script src="/src/js/observers.js" defer></script>
-  <script src="/src/js/faq.js" defer></script>
-  <script src="/src/js/mobile-menu.js" defer></script>
-  <script src="/src/js/modal.js" defer></script>
-  <script src="/src/js/contact.js" defer></script>
+  <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>

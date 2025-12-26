@@ -1,4 +1,5 @@
-document.addEventListener("DOMContentLoaded", () => {
+/* --- App: translations & language switching --- */
+export function initApp() {
   const defaultLang = "fr";
   const supportedLangs = ["en", "fr", "nl"];
   const langKey = "florisnexus_lang";
@@ -93,4 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.setLanguage = setLanguage;
   window.getCurrentLanguage = () => currentLang;
-});
+}
+
+export default initApp;

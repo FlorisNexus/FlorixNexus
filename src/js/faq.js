@@ -13,3 +13,13 @@ document.querySelectorAll(".faq-trigger").forEach((trigger) => {
     }
   });
 });
+// FAQ accordion behaviour
+export function initFAQ() {
+  document.querySelectorAll('.faq-item').forEach((item) => {
+    const btn = item.querySelector('.faq-question');
+    if (!btn) return;
+    btn.addEventListener('click', () => item.classList.toggle('open'));
+  });
+}
+
+export default initFAQ;

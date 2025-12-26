@@ -5,7 +5,7 @@
   "main": "index.html",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && npx shx mkdir -p dist/src/js && npx shx cp src/js/* dist/src/js/ && npx shx mkdir -p dist/assets && npx shx cp -r assets/* dist/assets/",
+  "build": "vite build && npx shx mkdir -p dist/src && npx shx cp -r src/js dist/src/ && npx shx mkdir -p dist/assets && npx shx cp -r assets/* dist/assets/",
     "preview": "vite preview",
     "setup-https": "powershell -Command \"if (!(Get-Command choco -ErrorAction SilentlyContinue)) { Write-Host 'Chocolatey not found. Install it from https://chocolatey.org/install and run this command again.'; exit 1 }; if (!(Get-Command mkcert -ErrorAction SilentlyContinue)) { choco install mkcert -y }; mkcert -install; mkcert localhost 127.0.0.1 ::1; New-Item -ItemType Directory -Force -Path certs; Move-Item -Force localhost+2.pem certs/localhost.pem; Move-Item -Force localhost+2-key.pem certs/localhost-key.pem; Write-Host 'HTTPS certs generated and moved to ./certs. Restart dev server with npm run dev.'\"",
     "check-seo": "npx lighthouse https://florisnexus.com --view"

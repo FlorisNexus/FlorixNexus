@@ -1,17 +1,17 @@
 /* --- Hero Video & Canvas Handler --- */
-window.addEventListener("load", () => {
+export function initHero() {
   const videoWrapper = document.getElementById("hero-video-wrapper");
-  setTimeout(() => {
-    if (videoWrapper) {
+  if (videoWrapper) {
+    setTimeout(() => {
       videoWrapper.classList.add("fade-out");
       setTimeout(() => videoWrapper.remove(), 2000);
-    }
-  }, 3000);
-});
+    }, 3000);
+  }
 
-/* --- Hero Canvas Animation --- */
-const canvas = document.getElementById("hero-canvas");
-if (canvas) {
+  /* --- Hero Canvas Animation --- */
+  const canvas = document.getElementById("hero-canvas");
+  if (!canvas) return;
+
   const ctx = canvas.getContext("2d");
   let width, height;
   let particles = [];
@@ -29,10 +29,7 @@ if (canvas) {
       this.vx = (Math.random() - 0.5) * 0.5;
       this.vy = (Math.random() - 0.5) * 0.5;
       this.size = Math.random() * 2;
-      this.color =
-        Math.random() > 0.5
-          ? "rgba(168, 85, 247, 0.5)"
-          : "rgba(6, 182, 212, 0.5)";
+      this.color = Math.random() > 0.5 ? "rgba(168, 85, 247, 0.5)" : "rgba(6, 182, 212, 0.5)";
     }
     update() {
       this.x += this.vx;
@@ -78,3 +75,5 @@ if (canvas) {
   resize();
   animateCanvas();
 }
+
+export default initHero;
